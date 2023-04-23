@@ -12,6 +12,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         opts.Authority = "https://localhost:7294";
         opts.Audience = "resource_api1";
     });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ReadProduct", policy =>
+    {
+        policy.RequireClaim("scope", "api1.read");
+    });
+
+    options.AddPolicy("UpdateOrCreate", policy =>
+    {
+        policy.RequireClaim("scope", new[] { "api1.update", "ap1.create" });
+    });
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
